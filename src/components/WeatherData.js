@@ -10,7 +10,7 @@ import {CLOUD,
 
 const WeatherData = () => (
     <div>
-        <WeatherTemperature temperature={12} weatherState={RAIN}/>
+        <WeatherTemperature     weatherState={RAIN}/>
         <WeatherExtraInfo humidity={80} wind={'10m/s'}/>
         
     </div>
