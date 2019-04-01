@@ -40,17 +40,40 @@ class WeatherLocation extends Component {
   constructor() {
     super();
     this.state = {
-      city: "Buenos Aires!", 
+      city: "Santo Domingo", 
       data: data1
     };
+  }
+
+  getData = (myWeather) => {
+    const { humidity, temp } = myWeather.main;
+    const { speed } = myWeather.wind;
+    const weatherState = this.getWeatherState(this.weather);
+
+    const data = {
+      humidity, 
+      temperature: temp,
+      weatherState,
+      wind: `${speed} m/s`,
+
+    }
+
+    return data;
+    
+  }
+
+  getWeatherState = weather =>{
+    return SUN;
   }
   
   handleUpdateClick = () => {
     fetch(apiWeather).then( data => {
       console.log(data);
       return data.json();
-    }).then( MyWeather => {
-      console.log(MyWeather);
+    }).then( myWeather => {
+      const data = this.getData(myWeather);
+      this.setState({data});
+      //console.log(myWeather);
       debugger;
     });
     
