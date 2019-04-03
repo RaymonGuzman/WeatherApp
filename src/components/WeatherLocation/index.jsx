@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import convert from 'convert-units';
 import Location from './Location';
 import WeatherData from './WeatherData';
  /* eslint-disable */
@@ -49,10 +50,11 @@ class WeatherLocation extends Component {
     const { humidity, temp } = myWeather.main;
     const { speed } = myWeather.wind;
     const weatherState = this.getWeatherState(this.weather);
+    const temperature = this.getTemp(temp);
 
     const data = {
       humidity, 
-      temperature: temp,
+      temperature,
       weatherState,
       wind: `${speed} m/s`,
 
@@ -60,6 +62,10 @@ class WeatherLocation extends Component {
 
     return data;
     
+  }
+
+  getTemp = kelvin =>{ 
+    return convert(kelvin).from('K').to('C').toFixed(2);
   }
 
   getWeatherState = weather =>{
