@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import convert from 'convert-units';
 import Location from './Location';
 import WeatherData from './WeatherData';
+import './styles.css';
+import transformWeather from './../../services/transformWeather';
+
  /* eslint-disable */
-import {
+ 
+ import {
   CLOUD,
   CLOUDY,
   SUN,
@@ -12,20 +15,13 @@ import {
   WINDY,
 } from '../../constants/weather';
 /* eslint-enable */
-import './styles.css';
 
 const location = "Santo Domingo,DO";
 const apiKey="8840ac59c60e363c8fae13d0fbdc7e71";
 
 const apiWeather = `http://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${apiKey}`;
 
-const data1 = {
-  temperature: 20,
-  weatherState: SUN,
-  humidity: 10,
-  wind: '10 m/s',
 
-};
 
 /* const data2 = {
   temperature: 18,
@@ -42,44 +38,20 @@ class WeatherLocation extends Component {
     super();
     this.state = {
       city: "Santo Domingo", 
-      data: data1
+      data: null
     };
   }
 
-  getData = (myWeather) => {
-    const { humidity, temp } = myWeather.main;
-    const { speed } = myWeather.wind;
-    const weatherState = this.getWeatherState(this.weather);
-    const temperature = this.getTemp(temp);
-
-    const data = {
-      humidity, 
-      temperature,
-      weatherState,
-      wind: `${speed} m/s`,
-
-    }
-
-    return data;
-    
-  }
-
-  getTemp = kelvin =>{ 
-    return convert(kelvin).from('K').to('C').toFixed(2);
-  }
-
-  getWeatherState = weather =>{
-    return SUN;
-  }
+ 
   
   handleUpdateClick = () => {
     fetch(apiWeather).then( data => {
       console.log(data);
       return data.json();
     }).then( myWeather => {
-      const data = this.getData(myWeather);
+      const data = transformWeather(myWeather);
       this.setState({data});
-      //console.log(myWeather);
+      console.log(myWeather);
       debugger;
     });
     
@@ -87,14 +59,22 @@ class WeatherLocation extends Component {
     console.log("Actualizado");
   }
 
-render = () => (
+  
+  componentWillMount() {
+    this.handleUpdateClick();
+  }
+  
 
+render = () => {
+
+  const { city, data} = this.state;
+  return(
   <div className="weatherLocationCont">
-    <Location city={this.state.city} />
-    <WeatherData data={this.state.data}/>
-    <button onClick={this.handleUpdateClick}>Actualizar</button>
-  </div>
-);
+    <Location city={city} />
+    {data ? <WeatherData data={data}/> : 'Cargando...'}
+    
+  </div>);
+};
 
 }
 
