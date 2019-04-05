@@ -3,27 +3,21 @@ import WeatherIcons from 'react-weathericons';
 import PropTypes from 'prop-types';
 import {
   CLOUD,
-  CLOUDY,
   SUN,
   RAIN,
   SNOW,
-  WINDY,
 } from '../../../constants/weather';
 
 const stateToIconName = (weatherState) => {
   switch (weatherState) {
     case CLOUD:
       return 'cloud';
-    case CLOUDY:
-      return 'cloudy';
     case SUN:
       return 'day-sunny';
     case RAIN:
       return 'rain';
     case SNOW:
       return 'snow';
-    case WINDY:
-      return 'windy';
     default:
       return 'day-sunny';
   }
