@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import CircularProgress from 'material-ui/CircularProgress';
+import propTypes from 'prop-types';
 import Location from './Location';
 import WeatherData from './WeatherData';
-import CircularProgress from 'material-ui/CircularProgress';
 import './styles.css';
-import transformWeather from './../../services/transformWeather';
-
- /* eslint-disable */
+import transformWeather from '../../services/transformWeather';
+/* eslint-disable */
  
  import {
   CLOUD,
@@ -17,12 +17,10 @@ import transformWeather from './../../services/transformWeather';
 } from '../../constants/weather';
 /* eslint-enable */
 
-const location = "Santo Domingo,DO";
-const apiKey="8840ac59c60e363c8fae13d0fbdc7e71";
 
-const apiWeather = `http://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${apiKey}`;
+const apiKey = '8840ac59c60e363c8fae13d0fbdc7e71';
 
-
+const url = 'http://api.openweathermap.org/data/2.5/weather';
 
 /* const data2 = {
   temperature: 18,
@@ -34,49 +32,49 @@ const apiWeather = `http://api.openweathermap.org/data/2.5/weather?q=${location}
 
 
 class WeatherLocation extends Component {
-  
-  constructor() {
+  constructor({ city }) {
     super();
     this.state = {
-      city: "Santo Domingo", 
-      data: null
+      city,
+      data: null,
     };
   }
 
- 
-  
-  handleUpdateClick = () => {
-    fetch(apiWeather).then( data => {
-      console.log(data);
-      return data.json();
-    }).then( myWeather => {
-      const data = transformWeather(myWeather);
-      this.setState({data});
-      console.log(myWeather);
-      debugger;
-    });
-    
-    
-    console.log("Actualizado");
-  }
 
-  
   componentWillMount() {
     this.handleUpdateClick();
   }
-  
+
+  handleUpdateClick = () => {
+    const { city } = this.state;
+    const apiWeather = `${url}?q=${city}&appid=${apiKey}`;
+    fetch(apiWeather).then((data) => {
+      console.log(data);
+      return data.json();
+    }).then((myWeather) => {
+      const data = transformWeather(myWeather);
+      this.setState({ data });
+      console.log(myWeather);
+    });
+
+
+    console.log('Actualizado');
+  }
 
 render = () => {
-
-  const { city, data} = this.state;
-  return(
-  <div className="weatherLocationCont">
-    <Location city={city} />
-    {data ? <WeatherData data={data}/> : 
-    <CircularProgress size={60} thickness={7} />}
-  </div>);
+  const { city, data } = this.state;
+  return (
+    <div className="weatherLocationCont">
+      <Location city={city} />
+      {data ? <WeatherData data={data} />
+        : <CircularProgress size={60} thickness={7} />}
+    </div>
+  );
 };
-
 }
+WeatherLocation.propTypes = {
+  city: propTypes.string,
+
+};
 
 export default WeatherLocation;
