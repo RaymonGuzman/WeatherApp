@@ -17,17 +17,28 @@ const getTemp = kelvin => (Number(convert(kelvin).from('K').to('C').toFixed(2)))
 const getWeatherState = (weather) => {
   const { id } = weather[0];
 
-  if (id < 300) {
+  if (id < 300) 
+  {
     return THUNDER;
-  } if (id < 500) {
+  } 
+  if (id < 500) 
+  {
     return DRIZZLE;
-  } if (id < 600) {
+  } 
+  if (id < 600) 
+  {
     return RAIN;
-  } if (id < 800) {
+  } 
+  if (id < 800) 
+  {
     return SNOW;
-  } if (id === 800) {
+  } 
+  if (id === 800)
+  {
     return SUN;
-  } if (id > 800) {
+  } 
+  if (id > 800) 
+  {
     return CLOUD; 
   }
 };
@@ -36,7 +47,7 @@ const transformWeather = (myWeather) => {
   const { weather } = myWeather;
   const { humidity, temp } = myWeather.main;
   const { speed } = myWeather.wind;
-  const weatherState = getWeatherState(SUN);
+  const weatherState = getWeatherState(weather);
   const temperature = getTemp(temp);
 
   const data = {
